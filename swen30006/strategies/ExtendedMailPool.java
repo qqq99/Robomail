@@ -14,7 +14,7 @@ import exceptions.ItemTooHeavyException;
 
 public class ExtendedMailPool implements IMailPool {
 	
-	private final int MAX_TEAM_SIZE = 3;
+	private final int MAX_TEAM_SIZE = 3; // For clarity. Not in used
 
 	private class Item {
 		int priority;
@@ -144,9 +144,7 @@ public class ExtendedMailPool implements IMailPool {
 	private void loadRobots(ListIterator<Robot> i, ListIterator<Item> j, MailItem mailItem) 
 			throws ItemTooHeavyException {
 		// Check item weight and decide the number of robots requiredMailItem item = mailItem;
-//		i.previous();
 		int numOfRobotsNeeded = getNumOfRobotsNeeded(mailItem);
-//		int numOfRobotsAvailable = getNumOfRobotsAvailable();
 		List<Robot> robotsToDispatch = new ArrayList<>();
 		
 		try {
