@@ -8,10 +8,16 @@ public class Clock {
     /** The threshold for the latest time for mail to arrive **/
     public static int LAST_DELIVERY_TIME;
 
+    /**
+     * @return The current time as an int value
+     */
     public static int Time() {
     	return Time;
     }
     
+    /**
+     * This method increases the current time int value by 1
+     */
     public static void Tick() {
     	Time++;
     }

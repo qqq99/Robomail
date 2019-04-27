@@ -4,6 +4,7 @@ import exceptions.ExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
 import exceptions.MailAlreadyDeliveredException;
 import strategies.Automail;
+import strategies.ExtendedMailPool;
 import strategies.IMailPool;
 import strategies.MailPool;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * This class simulates the behaviour of AutoMail
@@ -70,7 +72,7 @@ public class Simulation {
 		System.out.print("Robots: "); System.out.println(robots);
 		assert(robots > 0);
 		// MailPool
-		IMailPool mailPool = new MailPool(robots);
+		IMailPool mailPool = new ExtendedMailPool(robots); // Andrea: Replace the original MailPool here
 
 		// End properties
 		

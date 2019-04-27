@@ -49,6 +49,9 @@ public class Robot {
         this.deliveryCounter = 0;
     }
     
+    /**
+     * This method set a robot's receivedDispatch boolean value to true
+     */
     public void dispatch() {
     	receivedDispatch = true;
     }
@@ -144,6 +147,7 @@ public class Robot {
     private void changeState(RobotState nextState){
     	assert(!(deliveryItem == null && tube != null));
     	if (current_state != nextState) {
+    		// Example: R(1) means tube is also filled before delivery
             System.out.printf("T: %3d > %7s changed from %s to %s%n", Clock.Time(), getIdTube(), current_state, nextState);
     	}
     	current_state = nextState;
@@ -174,7 +178,7 @@ public class Robot {
 	public void addToHand(MailItem mailItem) throws ItemTooHeavyException {
 		assert(deliveryItem == null);
 		deliveryItem = mailItem;
-		if (deliveryItem.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
+		if (deliveryItem.weight > TRIPLE_MAX_WEIGHT) throw new ItemTooHeavyException();
 	}
 
 	public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
