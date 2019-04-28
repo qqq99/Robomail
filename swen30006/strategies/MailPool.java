@@ -14,6 +14,17 @@ import automail.Robot.RobotState;
 import exceptions.ItemTooHeavyException;
 import exceptions.MailAlreadyDeliveredException;
 
+/**
+ * A MailPool manages mail items to be delivered, and
+ * the robots to deliver these mail items.<br/><br/>
+ *
+ * A mail item can be carried by one to three robots.
+ * If a mail item requires more than one robot to carry, it can only be
+ * carried by a maximum of three robots with their hands.<br/><br/>
+ *
+ * Any mail items exceeding the INDIVIDUAL_MAX_WEIGHT of a {@link automail.Robot}
+ * cannot be put into the robot's tube.
+ */
 public class MailPool implements IMailPool {
 	
 	private final int MAX_TEAM_SIZE = 3; // For clarity. Not in used

@@ -4,8 +4,6 @@ import automail.IMailDelivery;
 import automail.Robot;
 
 public class Automail {
-	      
-	private static int SYS_MAX_WEIGHT;
     
 	private Robot[] robots;
     private IMailPool mailPool;

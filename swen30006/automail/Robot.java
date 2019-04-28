@@ -175,12 +175,26 @@ public class Robot {
 		return (deliveryItem == null && tube == null);
 	}
 
+    /**
+     * This method adds a mail item to the hands of a robot
+     * if the hands are empty
+     * @param mailItem A mail item to be added to the hands
+     * @throws ItemTooHeavyException
+     */
 	public void addToHand(MailItem mailItem) throws ItemTooHeavyException {
 		assert(deliveryItem == null);
 		deliveryItem = mailItem;
-		if (deliveryItem.weight > TRIPLE_MAX_WEIGHT) throw new ItemTooHeavyException();
+		// Adjust the max. weight a robot's hand can carry
+        // based on the team capacity and number of robots in the mail pool
+		if (deliveryItem.weight > mailPool.getSysMaxWeight()) throw new ItemTooHeavyException();
 	}
 
+    /**
+     * This method adds a mail item to the tube of a robot
+     * if the tube is empty
+     * @param mailItem A mail item to be added to the tube
+     * @throws ItemTooHeavyException
+     */
 	public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
 		assert(tube == null);
 		tube = mailItem;
