@@ -6,14 +6,12 @@ import exceptions.MailAlreadyDeliveredException;
 import strategies.Automail;
 import strategies.MailPool;
 import strategies.IMailPool;
-import strategies.MailPool;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 /**
  * This class simulates the behaviour of AutoMail
@@ -112,14 +110,14 @@ public class Simulation {
 				System.out.println("Simulation unable to complete.");
 				System.exit(0);
 			}
+            // Update the values
             numOfMailCreated = mailGenerator.MAIL_TO_CREATE;
             numOfMailDelivered = MAIL_DELIVERED.size();
             numOfMailRejected = automail.getMailPool().getNumOfMailItemRejected();
-//            System.out.printf("T: %3d > Delivered: %4d; Rejected: %4d; Created: %4d%n", Clock.Time(),
-//        			MAIL_DELIVERED.size(), automail.getMailPool().getNumOfMailItemRejected(), mailGenerator.MAIL_TO_CREATE);
+
             Clock.Tick();
         }
-        printResults();
+        printResults(automail, mailGenerator);
     }
     
     static class ReportDelivery implements IMailDelivery {
@@ -154,11 +152,12 @@ public class Simulation {
         return Math.pow(Clock.Time() - deliveryItem.getArrivalTime(),penalty)*(1+Math.sqrt(priority_weight));
     }
 
-    public static void printResults(){
+    public static void printResults(Automail automail, MailGenerator mailGenerator){
         System.out.println("T: "+Clock.Time()+" | Simulation complete!");
-        System.out.printf("T: %3d > Delivered: %4d; Rejected: %4d; Created: %4d%n", Clock.Time(),
-    			MAIL_DELIVERED.size(), automail.getMailPool().getNumOfMailItemRejected(), mailGenerator.MAIL_TO_CREATE);
-        System.out.println("Final Delivery time: "+Clock.Time());
-        System.out.printf("Final Score: %.2f%n", total_score);
+		System.out.printf("Mail item created: %6d%n", mailGenerator.MAIL_TO_CREATE);
+		System.out.printf("Mail item delivered: %4d%n", MAIL_DELIVERED.size());
+		System.out.printf("Mail item rejected: %5d%n", automail.getMailPool().getNumOfMailItemRejected());
+        System.out.printf("Final Delivery time: %4d%n", Clock.Time());
+        System.out.printf("Final Score: %12.2f%n", total_score);
     }
 }
