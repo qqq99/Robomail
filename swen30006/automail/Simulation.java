@@ -4,7 +4,7 @@ import exceptions.ExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
 import exceptions.MailAlreadyDeliveredException;
 import strategies.Automail;
-import strategies.ExtendedMailPool;
+import strategies.MailPool;
 import strategies.IMailPool;
 import strategies.MailPool;
 
@@ -72,7 +72,7 @@ public class Simulation {
 		System.out.print("Robots: "); System.out.println(robots);
 		assert(robots > 0);
 		// MailPool
-		IMailPool mailPool = new ExtendedMailPool(robots); // Andrea: Replace the original MailPool here
+		IMailPool mailPool = new MailPool(robots);
 
 		// End properties
 		
@@ -94,22 +94,29 @@ public class Simulation {
         Integer seed = seedMap.get(true);
         System.out.printf("Seed: %s%n", seed == null ? "null" : seed.toString());
         Automail automail = new Automail(mailPool, new ReportDelivery(), robots);
-        MailGenerator mailGenerator = new MailGenerator(MAIL_TO_CREATE, MAIL_MAX_WEIGHT, automail.mailPool, seedMap);
+        MailGenerator mailGenerator = new MailGenerator(MAIL_TO_CREATE, MAIL_MAX_WEIGHT, automail.getMailPool(), seedMap);
         
         /** Initiate all the mail */
         mailGenerator.generateAllMail();
         // PriorityMailItem priority;  // Not used in this version
-        while(MAIL_DELIVERED.size() != mailGenerator.MAIL_TO_CREATE) {
-        	// System.out.printf("Delivered: %4d; Created: %4d%n", MAIL_DELIVERED.size(), mailGenerator.MAIL_TO_CREATE);
-            mailGenerator.step();
+        int numOfMailCreated = mailGenerator.MAIL_TO_CREATE;
+        int numOfMailDelivered = MAIL_DELIVERED.size();
+        int numOfMailRejected = automail.getMailPool().getNumOfMailItemRejected();
+        while(numOfMailCreated != numOfMailDelivered + numOfMailRejected) {
+        	mailGenerator.step();
             try {
-                automail.mailPool.step();
-				for (int i=0; i<robots; i++) automail.robots[i].step();
+            	automail.getMailPool().step();
+				for (int i=0; i<robots; i++) automail.getRobot(i).step();
 			} catch (ExcessiveDeliveryException|ItemTooHeavyException e) {
 				e.printStackTrace();
 				System.out.println("Simulation unable to complete.");
 				System.exit(0);
 			}
+            numOfMailCreated = mailGenerator.MAIL_TO_CREATE;
+            numOfMailDelivered = MAIL_DELIVERED.size();
+            numOfMailRejected = automail.getMailPool().getNumOfMailItemRejected();
+//            System.out.printf("T: %3d > Delivered: %4d; Rejected: %4d; Created: %4d%n", Clock.Time(),
+//        			MAIL_DELIVERED.size(), automail.getMailPool().getNumOfMailItemRejected(), mailGenerator.MAIL_TO_CREATE);
             Clock.Tick();
         }
         printResults();
@@ -149,6 +156,8 @@ public class Simulation {
 
     public static void printResults(){
         System.out.println("T: "+Clock.Time()+" | Simulation complete!");
+        System.out.printf("T: %3d > Delivered: %4d; Rejected: %4d; Created: %4d%n", Clock.Time(),
+    			MAIL_DELIVERED.size(), automail.getMailPool().getNumOfMailItemRejected(), mailGenerator.MAIL_TO_CREATE);
         System.out.println("Final Delivery time: "+Clock.Time());
         System.out.printf("Final Score: %.2f%n", total_score);
     }

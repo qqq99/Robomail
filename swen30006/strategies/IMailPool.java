@@ -15,6 +15,7 @@ public interface IMailPool {
 	/**
      * Adds an item to the mail pool
      * @param mailItem the mail item being added.
+	 * @throws ItemTooHeavyException 
      */
     void addToPool(MailItem mailItem);
     
@@ -27,5 +28,17 @@ public interface IMailPool {
      * @param robot refers to a robot which has arrived back ready for more mailItems to deliver
      */	
 	void registerWaiting(Robot robot);
+	
+	/**
+	 * This method returns the max. weight this mail pool can handle
+	 * @return Maximum weight the mail pool can handle
+	 */
+	int getSysMaxWeight();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getNumOfMailItemRejected();
 
 }

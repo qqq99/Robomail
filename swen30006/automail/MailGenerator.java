@@ -1,7 +1,6 @@
 package automail;
 
 import java.util.*;
-
 import strategies.IMailPool;
 
 /**
@@ -139,9 +138,9 @@ public class MailGenerator {
     	// Check if there are any mail to create
         if(this.allMail.containsKey(Clock.Time())){
             for(MailItem mailItem : allMail.get(Clock.Time())){
-            	if (mailItem instanceof PriorityMailItem) priority = ((PriorityMailItem) mailItem);
-                System.out.printf("T: %3d > new addToPool [%s]%n", Clock.Time(), mailItem.toString());
-                mailPool.addToPool(mailItem);
+        		if (mailItem instanceof PriorityMailItem) priority = ((PriorityMailItem) mailItem);
+	            System.out.printf("T: %3d > new addToPool [%s]%n", Clock.Time(), mailItem.toString());
+	            mailPool.addToPool(mailItem);
             }
         }
         return priority;
