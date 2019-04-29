@@ -8,6 +8,7 @@ import strategies.IMailPool;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Properties;
 
 import static automail.ReportDelivery.printResults;
@@ -65,7 +66,7 @@ public class Simulation {
 		System.out.print("Robots: "); System.out.println(robots);
 		assert(robots > 0);
 		// MailPool
-		IMailPool mailPool = new MailPool(robots);
+		IMailPool mailPool = new MailPool(new LinkedList<>(), new LinkedList<>(), robots);
 
 		// End properties
 
@@ -84,7 +85,7 @@ public class Simulation {
         }
         Integer seed = seedMap.get(true);
         System.out.printf("Seed: %s%n", seed == null ? "null" : seed.toString());
-        Automail automail = new Automail(mailPool, new ReportDelivery(), robots);
+        Automail automail = new Automail(mailPool, new ReportDelivery(), new Robot[robots]);
         MailGenerator mailGenerator = new MailGenerator(
         		MAIL_TO_CREATE, MAIL_MAX_WEIGHT, automail.getMailPool(), seedMap);
         
