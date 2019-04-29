@@ -115,6 +115,12 @@ public class Simulation {
             numOfMailDelivered = MAIL_DELIVERED.size();
             numOfMailRejected = automail.getMailPool().getNumOfMailItemRejected();
 
+			// For debugging
+//			System.out.printf("Created: %6d%n; Delivered: %4d%n; Rejected: %5d%n",
+//					mailGenerator.MAIL_TO_CREATE,
+//					MAIL_DELIVERED.size(),
+//					automail.getMailPool().getNumOfMailItemRejected());
+
             Clock.Tick();
         }
         printResults(automail, mailGenerator);
@@ -126,8 +132,8 @@ public class Simulation {
     	public void deliver(MailItem deliveryItem){
     		if(!MAIL_DELIVERED.contains(deliveryItem)){
     			MAIL_DELIVERED.add(deliveryItem);
-                System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString());
-    			// Calculate delivery score
+    			System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString());
+				// Calculate delivery score
     			total_score += calculateDeliveryScore(deliveryItem);
     		}
     		else{
@@ -154,10 +160,15 @@ public class Simulation {
 
     public static void printResults(Automail automail, MailGenerator mailGenerator){
         System.out.println("T: "+Clock.Time()+" | Simulation complete!");
-		System.out.printf("Mail item created: %6d%n", mailGenerator.MAIL_TO_CREATE);
-		System.out.printf("Mail item delivered: %4d%n", MAIL_DELIVERED.size());
-		System.out.printf("Mail item rejected: %5d%n", automail.getMailPool().getNumOfMailItemRejected());
-        System.out.printf("Final Delivery time: %4d%n", Clock.Time());
-        System.out.printf("Final Score: %12.2f%n", total_score);
+
+		// Make sure the output is the same for one robot with max. system weight = 2000
+        if (automail.getMailPool().getNumOfMailItemRejected() > 0){
+			System.out.printf("Created: %6d%n; Delivered: %4d%n; Rejected: %5d%n",
+					mailGenerator.MAIL_TO_CREATE,
+					MAIL_DELIVERED.size(),
+					automail.getMailPool().getNumOfMailItemRejected());
+		}
+		System.out.println("Final Delivery time: "+Clock.Time());
+		System.out.printf("Final Score: %.2f%n", total_score);
     }
 }
