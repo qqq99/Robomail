@@ -27,7 +27,7 @@ import exceptions.MailAlreadyDeliveredException;
  */
 public class MailPool implements IMailPool {
 	
-	private final int MAX_TEAM_SIZE = 3; // For clarity. Not in used
+	private final int MAX_TEAM_SIZE = 3; // For clarity only. Not in used
 
 	private class Item {
 		int priority;
@@ -68,8 +68,8 @@ public class MailPool implements IMailPool {
 
 	public MailPool(int nrobots){
 		// Start empty
-		pool = new LinkedList<Item>();
-		robots = new LinkedList<Robot>();
+		pool = new LinkedList<>();
+		robots = new LinkedList<>();
 		numOfRobots = nrobots;
 		switch(numOfRobots) {
 		case 0:
@@ -86,7 +86,7 @@ public class MailPool implements IMailPool {
 			SYS_MAX_WEIGHT = Robot.TRIPLE_MAX_WEIGHT;
 			break;	
 		}
-		MAIL_REJECTED = new ArrayList<MailItem>();
+		MAIL_REJECTED = new ArrayList<>();
 	}
 
 	/**
@@ -173,7 +173,14 @@ public class MailPool implements IMailPool {
             throw e; 
         }
 	}
-	
+
+	/**
+	 * This method loads mailItems to a team of robots
+	 * @param i A listIterator of robots
+	 * @param j A listIterator of mailItems to be assigned and delivered
+	 * @param mailItem The first mailItem to be added to this robot
+	 * @throws ItemTooHeavyException
+	 */
 	private void loadRobots(ListIterator<Robot> i, ListIterator<Item> j, MailItem mailItem) 
 			throws ItemTooHeavyException {
 		// Check item weight and decide the number of robots requiredMailItem item = mailItem;
@@ -200,7 +207,23 @@ public class MailPool implements IMailPool {
 	public void registerWaiting(Robot robot) { // assumes won't be there already
 		robots.add(robot);
 	}
-	
+
+	/**
+	 * This method returns the number of robots of the mail pool
+	 * @return The number of robots at the mail pool
+	 */
+	public int getNumOfRobots(){
+		return numOfRobots;
+	}
+
+	/**
+	 * This method gets a list of robots from the mail pool
+	 * @return A LinkedList of robots at the mail pool
+	 */
+	public LinkedList<Robot> getRobots(){
+		return robots;
+	}
+
 	/**
 	 * This method gets the number of robots needed to deliver a mailItem
 	 * @param mailItem MailItem to be delivered

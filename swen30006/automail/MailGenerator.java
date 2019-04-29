@@ -6,10 +6,10 @@ import strategies.IMailPool;
 /**
  * This class generates the mail
  */
-public class MailGenerator {
+public class MailGenerator{
 
-    public final int MAIL_TO_CREATE;
-    public final int MAIL_MAX_WEIGHT;
+    private final int MAIL_TO_CREATE;
+    private final int MAIL_MAX_WEIGHT;
     
     private int mailCreated;
 
@@ -126,7 +126,6 @@ public class MailGenerator {
                 complete = true;
             }
         }
-
     }
     
     /**
@@ -145,5 +144,9 @@ public class MailGenerator {
         }
         return priority;
     }
-    
+
+    public int getMailCreated() {
+        return mailCreated;
+    }
+
 }

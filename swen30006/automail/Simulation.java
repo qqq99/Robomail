@@ -1,17 +1,16 @@
 package automail;
 
-import exceptions.ExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
-import exceptions.MailAlreadyDeliveredException;
 import strategies.Automail;
 import strategies.MailPool;
 import strategies.IMailPool;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
+
+import static automail.ReportDelivery.printResults;
 
 /**
  * This class simulates the behaviour of AutoMail
@@ -21,10 +20,6 @@ public class Simulation {
     /** Constant for the mail generator */
     private static int MAIL_TO_CREATE;
     private static int MAIL_MAX_WEIGHT;
-    
-
-    private static ArrayList<MailItem> MAIL_DELIVERED;
-    private static double total_score = 0;
 
     public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
     	Properties automailProperties = new Properties();
@@ -73,9 +68,7 @@ public class Simulation {
 		IMailPool mailPool = new MailPool(robots);
 
 		// End properties
-		
-        MAIL_DELIVERED = new ArrayList<MailItem>();
-                
+
         /** Used to see whether a seed is initialized or not */
         HashMap<Boolean, Integer> seedMap = new HashMap<>();
         
@@ -92,83 +85,30 @@ public class Simulation {
         Integer seed = seedMap.get(true);
         System.out.printf("Seed: %s%n", seed == null ? "null" : seed.toString());
         Automail automail = new Automail(mailPool, new ReportDelivery(), robots);
-        MailGenerator mailGenerator = new MailGenerator(MAIL_TO_CREATE, MAIL_MAX_WEIGHT, automail.getMailPool(), seedMap);
+        MailGenerator mailGenerator = new MailGenerator(
+        		MAIL_TO_CREATE, MAIL_MAX_WEIGHT, automail.getMailPool(), seedMap);
         
         /** Initiate all the mail */
         mailGenerator.generateAllMail();
         // PriorityMailItem priority;  // Not used in this version
-        int numOfMailCreated = mailGenerator.MAIL_TO_CREATE;
-        int numOfMailDelivered = MAIL_DELIVERED.size();
-        int numOfMailRejected = automail.getMailPool().getNumOfMailItemRejected();
-        while(numOfMailCreated != numOfMailDelivered + numOfMailRejected) {
+        while(mailGenerator.getMailCreated() !=
+				ReportDelivery.getNumOfMailDelivered() + automail.getMailPool().getNumOfMailItemRejected()) {
+        	// Add items to the pool
         	mailGenerator.step();
             try {
+				// Load items to the robots
             	automail.getMailPool().step();
-				for (int i=0; i<robots; i++) automail.getRobot(i).step();
-			} catch (ExcessiveDeliveryException|ItemTooHeavyException e) {
+            	// Move robots
+				for (int k=0; k<automail.getMailPool().getNumOfRobots(); k++) automail.getRobot(k).step();
+			} catch (ItemTooHeavyException e) {
 				e.printStackTrace();
 				System.out.println("Simulation unable to complete.");
 				System.exit(0);
 			}
-            // Update the values
-            numOfMailCreated = mailGenerator.MAIL_TO_CREATE;
-            numOfMailDelivered = MAIL_DELIVERED.size();
-            numOfMailRejected = automail.getMailPool().getNumOfMailItemRejected();
-
-			// For debugging
-//			System.out.printf("Created: %6d%n; Delivered: %4d%n; Rejected: %5d%n",
-//					mailGenerator.MAIL_TO_CREATE,
-//					MAIL_DELIVERED.size(),
-//					automail.getMailPool().getNumOfMailItemRejected());
-
             Clock.Tick();
         }
         printResults(automail, mailGenerator);
     }
     
-    static class ReportDelivery implements IMailDelivery {
-    	
-    	/** Confirm the delivery and calculate the total score */
-    	public void deliver(MailItem deliveryItem){
-    		if(!MAIL_DELIVERED.contains(deliveryItem)){
-    			MAIL_DELIVERED.add(deliveryItem);
-    			System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString());
-				// Calculate delivery score
-    			total_score += calculateDeliveryScore(deliveryItem);
-    		}
-    		else{
-    			try {
-    				throw new MailAlreadyDeliveredException();
-    			} catch (MailAlreadyDeliveredException e) {
-    				e.printStackTrace();
-    			}
-    		}
-    	}
 
-    }
-    
-    private static double calculateDeliveryScore(MailItem deliveryItem) {
-    	// Penalty for longer delivery times
-    	final double penalty = 1.2;
-    	double priority_weight = 0;
-        // Take (delivery time - arrivalTime)**penalty * (1+sqrt(priority_weight))
-    	if(deliveryItem instanceof PriorityMailItem){
-    		priority_weight = ((PriorityMailItem) deliveryItem).getPriorityLevel();
-    	}
-        return Math.pow(Clock.Time() - deliveryItem.getArrivalTime(),penalty)*(1+Math.sqrt(priority_weight));
-    }
-
-    public static void printResults(Automail automail, MailGenerator mailGenerator){
-        System.out.println("T: "+Clock.Time()+" | Simulation complete!");
-
-		// Make sure the output is the same for one robot with max. system weight = 2000
-        if (automail.getMailPool().getNumOfMailItemRejected() > 0){
-			System.out.printf("Created: %6d%n; Delivered: %4d%n; Rejected: %5d%n",
-					mailGenerator.MAIL_TO_CREATE,
-					MAIL_DELIVERED.size(),
-					automail.getMailPool().getNumOfMailItemRejected());
-		}
-		System.out.println("Final Delivery time: "+Clock.Time());
-		System.out.printf("Final Score: %.2f%n", total_score);
-    }
 }
