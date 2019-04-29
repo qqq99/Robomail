@@ -10,10 +10,10 @@ import java.util.TreeMap;
  * The robot delivers mail!
  */
 public class Robot implements IMovable{
-	
-    static public final int INDIVIDUAL_MAX_WEIGHT = 2000;
-    static public final int PAIR_MAX_WEIGHT = 2600;
-    static public final int TRIPLE_MAX_WEIGHT = 3000;
+
+    public static final int INDIVIDUAL_MAX_WEIGHT = 2000;
+    public static final int PAIR_MAX_WEIGHT = 2600;
+    public static final int TRIPLE_MAX_WEIGHT = 3000;
 
     IMailDelivery delivery;
     protected final String id;
@@ -92,8 +92,16 @@ public class Robot implements IMovable{
                     break;
                 case DELIVERING:
                     if(current_floor == destination_floor){ // If already here drop off either way
-                        /** Delivery complete, report this to the simulator! */
-                        delivery.deliver(deliveryItem);
+
+                        if (mailPool.getRobotsDelivering(deliveryItem) == TEAM_SIZE.ONE.getValue()){
+                            /**
+                             * Last robot to deliver this item(as an individual or as a team),
+                             * report this to the simulator!
+                             */
+                            delivery.deliver(deliveryItem);
+                        } else {
+                            mailPool.removeRobotFromDelivery(deliveryItem);
+                        }
                         deliveryItem = null;
                         deliveryCounter++;
                         if(deliveryCounter > 2){  // Implies a simulation bug
@@ -110,6 +118,8 @@ public class Robot implements IMovable{
                             setRoute();
                             changeState(RobotState.DELIVERING);
                         }
+
+
                     } else {
                         /** The robot is not at the destination yet, move towards it! */
                         moveTowards(destination_floor);

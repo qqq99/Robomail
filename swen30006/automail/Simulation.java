@@ -22,7 +22,7 @@ public class Simulation {
     private static int MAIL_TO_CREATE;
     private static int MAIL_MAX_WEIGHT;
 
-    public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException {
     	Properties automailProperties = new Properties();
 		// Default properties
     	// automailProperties.setProperty("Robots", "Big,Careful,Standard,Weak");
