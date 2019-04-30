@@ -83,7 +83,6 @@ public class Simulation {
         }
         Integer seed = seedMap.get(true);
         System.out.printf("Seed: %s%n", seed == null ? "null" : seed.toString());
-        ReportDelivery reportDelivery;
         Automail automail = new Automail(mailPool, ReportDelivery.getInstance(), new Robot[robots]);
         MailGenerator mailGenerator = new MailGenerator(
         		MAIL_TO_CREATE, MAIL_MAX_WEIGHT, automail.getMailPool(), seedMap);
