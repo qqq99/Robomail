@@ -7,12 +7,18 @@ import java.util.ArrayList;
 
 public class ReportDelivery implements IMailDelivery {
 
-    private static double TOTAL_SCORE;
-    private static ArrayList<MailItem> MAIL_DELIVERED;
+    private static double TOTAL_SCORE = 0;
+    private static ArrayList<MailItem> MAIL_DELIVERED = new ArrayList<>();
 
-    static {
-        MAIL_DELIVERED = new ArrayList<>();
-        TOTAL_SCORE = 0;
+    // Use Bill Pugh to implement Singleton
+    private ReportDelivery(){}
+
+    private static class SingletonHelper{
+        private static final ReportDelivery INSTANCE = new ReportDelivery();
+    }
+
+    public static ReportDelivery getInstance(){
+        return SingletonHelper.INSTANCE;
     }
 
     public static int getNumOfMailDelivered(){
@@ -37,7 +43,7 @@ public class ReportDelivery implements IMailDelivery {
         }
     }
 
-    private static double calculateDeliveryScore(MailItem deliveryItem) {
+    private double calculateDeliveryScore(MailItem deliveryItem) {
         // Penalty for longer delivery times
         final double penalty = 1.2;
         double priority_weight = 0;

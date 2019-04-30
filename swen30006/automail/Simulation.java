@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Properties;
 
-import static automail.ReportDelivery.printResults;
-
 /**
  * This class simulates the behaviour of AutoMail
  */
@@ -85,7 +83,8 @@ public class Simulation {
         }
         Integer seed = seedMap.get(true);
         System.out.printf("Seed: %s%n", seed == null ? "null" : seed.toString());
-        Automail automail = new Automail(mailPool, new ReportDelivery(), new Robot[robots]);
+        ReportDelivery reportDelivery;
+        Automail automail = new Automail(mailPool, ReportDelivery.getInstance(), new Robot[robots]);
         MailGenerator mailGenerator = new MailGenerator(
         		MAIL_TO_CREATE, MAIL_MAX_WEIGHT, automail.getMailPool(), seedMap);
         
@@ -108,7 +107,7 @@ public class Simulation {
 			}
             Clock.Tick();
         }
-        printResults(automail, mailGenerator);
+        ReportDelivery.printResults(automail, mailGenerator);
     }
     
 
