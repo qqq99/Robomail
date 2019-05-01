@@ -136,6 +136,7 @@ public class Robot implements IMovable{
                             if (waitCounter == 2){
                                 // Finish waiting and move a step
                                 moveTowards(destinationFloor);
+                                resetWaitCounter(); // reset for the next move
                             } else {
                                 // Keep waiting
                                 countWait();
