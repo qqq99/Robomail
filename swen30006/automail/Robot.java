@@ -19,9 +19,9 @@ public class Robot implements IMovable{
     protected final String id;
     /** Possible states the robot can be in */
     public enum RobotState { DELIVERING, WAITING, RETURNING }
-    public RobotState current_state;
-    private int current_floor;
-    private int destination_floor;
+    public RobotState currentState;
+    private int currentFloor;
+    private int destinationFloor;
     private IMailPool mailPool;
     private boolean receivedDispatch;
     
@@ -43,9 +43,9 @@ public class Robot implements IMovable{
      */
     public Robot(IMailDelivery delivery, IMailPool mailPool){
     	id = "R" + hashCode();
-        // current_state = RobotState.WAITING;
-    	this.current_state = RobotState.RETURNING;
-        this.current_floor = Building.MAILROOM_LOCATION;
+        // currentState = RobotState.WAITING;
+    	this.currentState = RobotState.RETURNING;
+        this.currentFloor = Building.MAILROOM_LOCATION;
         this.delivery = delivery;
         this.mailPool = mailPool;
         this.receivedDispatch = false;
@@ -68,11 +68,11 @@ public class Robot implements IMovable{
     @Override
     public void step() {
         try {
-            switch(current_state) {
+            switch(currentState) {
                 /** This state is triggered when the robot is returning to the mailroom after a delivery */
                 case RETURNING:
                     /** If its current position is at the mailroom, then the robot should change state */
-                    if(current_floor == Building.MAILROOM_LOCATION){
+                    if(currentFloor == Building.MAILROOM_LOCATION){
                         if (tube != null) {
                             mailPool.addToPool(tube);
                             System.out.printf("T: %3d > old addToPool [%s]%n", Clock.Time(), tube.toString());
@@ -96,7 +96,7 @@ public class Robot implements IMovable{
                     }
                     break;
                 case DELIVERING:
-                    if(current_floor == destination_floor){ // If already here drop off either way
+                    if(currentFloor == destinationFloor){ // If already here drop off either way
 
                         if (mailPool.getRobotsDelivering(deliveryItem) == TeamSize.ONE.getValue()){
                             /**
@@ -130,12 +130,12 @@ public class Robot implements IMovable{
                         /** The robot is not at the destination yet, move towards it! */
                         if (!isTeamModeOn()){
                             /** Working as an individual */
-                            moveTowards(destination_floor);
+                            moveTowards(destinationFloor);
                         } else {
                             /** Working as a team. */
                             if (waitCounter == 2){
                                 // Finish waiting and move a step
-                                moveTowards(destination_floor);
+                                moveTowards(destinationFloor);
                             } else {
                                 // Keep waiting
                                 countWait();
@@ -156,7 +156,7 @@ public class Robot implements IMovable{
      */
     private void setRoute() {
         /** Set the destination floor */
-        destination_floor = deliveryItem.getDestFloor();
+        destinationFloor = deliveryItem.getDestFloor();
     }
 
     /**
@@ -164,10 +164,10 @@ public class Robot implements IMovable{
      * @param destination the floor towards which the robot is moving
      */
     private void moveTowards(int destination) {
-        if(current_floor < destination){
-            current_floor++;
+        if(currentFloor < destination){
+            currentFloor++;
         } else {
-            current_floor--;
+            currentFloor--;
         }
     }
     
@@ -181,11 +181,11 @@ public class Robot implements IMovable{
      */
     private void changeState(RobotState nextState){
     	assert(!(deliveryItem == null && tube != null));
-    	if (current_state != nextState) {
+    	if (currentState != nextState) {
     		// Example: R(1) means tube is also filled before delivery
-            System.out.printf("T: %3d > %7s changed from %s to %s%n", Clock.Time(), getIdTube(), current_state, nextState);
+            System.out.printf("T: %3d > %7s changed from %s to %s%n", Clock.Time(), getIdTube(), currentState, nextState);
     	}
-    	current_state = nextState;
+    	currentState = nextState;
     	if(nextState == RobotState.DELIVERING){
             System.out.printf("T: %3d > %7s-> [%s]%n", Clock.Time(), getIdTube(), deliveryItem.toString());
     	}

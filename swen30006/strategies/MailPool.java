@@ -243,7 +243,7 @@ public class MailPool implements IMailPool {
 	private int getNumOfRobotsAvailable() {
 		int count = 0;
 		for (Robot robot: robots) {
-			if (robot.isEmpty() && robot.current_state == RobotState.WAITING) {
+			if (robot.isEmpty() && robot.currentState == RobotState.WAITING) {
 				count++;
 			}
 		}
