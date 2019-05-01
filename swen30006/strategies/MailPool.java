@@ -63,21 +63,8 @@ public class MailPool implements IMailPool {
 		this.pool = pool;
 		this.robots = robots;
 		this.numOfRobots = nrobots;
-		switch(numOfRobots) {
-		case 0:
-			MAX_WEIGHT = 0;
-			break;
-		case 1:
-			MAX_WEIGHT = Robot.INDIVIDUAL_MAX_WEIGHT;
-			break;
-		case 2:
-			MAX_WEIGHT = Robot.PAIR_MAX_WEIGHT;
-			break;
-		case 3:
-		default: // 3 or more robots
-			MAX_WEIGHT = Robot.TRIPLE_MAX_WEIGHT;
-			break;	
-		}
+
+		setMaxWeight(nrobots);
 	}
 
 	/**
@@ -203,6 +190,24 @@ public class MailPool implements IMailPool {
 	@Override
 	public void registerWaiting(Robot robot) { // assumes won't be there already
 		robots.add(robot);
+	}
+
+	private void setMaxWeight(int numOfRobots){
+		switch(numOfRobots) {
+			case 0:
+				MAX_WEIGHT = 0;
+				break;
+			case 1:
+				MAX_WEIGHT = Robot.INDIVIDUAL_MAX_WEIGHT;
+				break;
+			case 2:
+				MAX_WEIGHT = Robot.PAIR_MAX_WEIGHT;
+				break;
+			case 3:
+			default: // 3 or more robots
+				MAX_WEIGHT = Robot.TRIPLE_MAX_WEIGHT;
+				break;
+		}
 	}
 
 	/**

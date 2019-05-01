@@ -1,6 +1,11 @@
-package automail;
+package util;
 
 import java.util.*;
+
+import automail.Building;
+import automail.Clock;
+import automail.MailItem;
+import automail.PriorityMailItem;
 import strategies.IMailPool;
 
 /**

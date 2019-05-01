@@ -1,5 +1,6 @@
-package automail;
+package util;
 
+import automail.*;
 import exceptions.MailAlreadyDeliveredException;
 import strategies.Automail;
 
