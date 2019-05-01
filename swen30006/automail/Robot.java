@@ -133,7 +133,7 @@ public class Robot implements IMovable{
                             moveTowards(destinationFloor);
                         } else {
                             /** Working as a team. */
-                            if (waitCounter == 2){
+                            if (finishWaiting()){
                                 // Finish waiting and move a step
                                 moveTowards(destinationFloor);
                                 resetWaitCounter(); // reset for the next move
@@ -276,6 +276,14 @@ public class Robot implements IMovable{
      */
     public int getWaitCounter(){ // Not used in this version. Good practice to keep a getter
 	    return waitCounter;
+    }
+
+    /**
+     * This method checks whether a robot, working in a team, finishes waiting
+     * and is ready for the next move
+     */
+    private boolean finishWaiting(){
+        return waitCounter == 2;
     }
 
     /**
