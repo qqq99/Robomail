@@ -6,8 +6,6 @@ import automail.*;
 import automail.Robot.RobotState;
 import exceptions.ItemTooHeavyException;
 
-import static automail.TEAM_SIZE.ONE;
-
 /**
  * A MailPool receives and delivers mail items in a building
  * with the use of robots.<br/><br/>
@@ -156,9 +154,9 @@ public class MailPool implements IMailPool {
 			// Add to tube
 			if (j.hasNext()) {
 				item = j.next().mailItem;
-				if (getNumOfRobotsNeeded(item) == TEAM_SIZE.ONE.getValue()) {
+				if (getNumOfRobotsNeeded(item) == TeamSize.ONE.getValue()) {
 					robot.addToTube(item);
-					ROBOTS_DELIVERING.put(item, TEAM_SIZE.ONE.getValue());
+					ROBOTS_DELIVERING.put(item, TeamSize.ONE.getValue());
 					j.remove();
 				} else {
 					j.previous(); // Move back the pointer 
@@ -190,6 +188,8 @@ public class MailPool implements IMailPool {
 
 				assert(robot.isEmpty());
 				robot.addToHand(mailItem); // hand first as we want higher priority delivered first
+
+				robot.turnTeamModeOn();
 				i.remove(); // remove robot from robot queue
 			}
 			robotsToDispatch.forEach(robot -> robot.dispatch()); // send the robots off as a team

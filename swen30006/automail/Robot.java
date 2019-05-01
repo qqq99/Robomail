@@ -25,8 +25,12 @@ public class Robot implements IMovable{
     private IMailPool mailPool;
     private boolean receivedDispatch;
     
-    private MailItem deliveryItem = null;
-    private MailItem tube = null;
+    private MailItem deliveryItem;
+    private MailItem tube;
+
+    /** For switching between individual and team mode */
+    private boolean teamMode; // true for working as a team. false for working as an individual
+    private int waitCounter; // Count the number of time to wait before moving a step
     
     private int deliveryCounter;
     
@@ -34,19 +38,20 @@ public class Robot implements IMovable{
     /**
      * Initiates the robot's location at the start to be at the mailroom
      * also set it to be waiting for mail.
-     * @param behaviour governs selection of mail items for delivery and behaviour on priority arrivals
      * @param delivery governs the final delivery
      * @param mailPool is the source of mail items
      */
     public Robot(IMailDelivery delivery, IMailPool mailPool){
     	id = "R" + hashCode();
         // current_state = RobotState.WAITING;
-    	current_state = RobotState.RETURNING;
-        current_floor = Building.MAILROOM_LOCATION;
+    	this.current_state = RobotState.RETURNING;
+        this.current_floor = Building.MAILROOM_LOCATION;
         this.delivery = delivery;
         this.mailPool = mailPool;
         this.receivedDispatch = false;
         this.deliveryCounter = 0;
+        this.teamMode = false;
+        this.waitCounter = 0;
     }
     
     /**
@@ -93,12 +98,13 @@ public class Robot implements IMovable{
                 case DELIVERING:
                     if(current_floor == destination_floor){ // If already here drop off either way
 
-                        if (mailPool.getRobotsDelivering(deliveryItem) == TEAM_SIZE.ONE.getValue()){
+                        if (mailPool.getRobotsDelivering(deliveryItem) == TeamSize.ONE.getValue()){
                             /**
                              * Last robot to deliver this item(as an individual or as a team),
                              * report this to the simulator!
                              */
                             delivery.deliver(deliveryItem);
+                            turnTeamModeOff(); // Turn off team mode and reset waitCounter to zero
                         } else {
                             mailPool.removeRobotFromDelivery(deliveryItem);
                         }
@@ -122,7 +128,20 @@ public class Robot implements IMovable{
 
                     } else {
                         /** The robot is not at the destination yet, move towards it! */
-                        moveTowards(destination_floor);
+                        if (!isTeamModeOn()){
+                            /** Working as an individual */
+                            moveTowards(destination_floor);
+                        } else {
+                            /** Working as a team. */
+                            if (waitCounter == 2){
+                                // Finish waiting and move a step
+                                moveTowards(destination_floor);
+                            } else {
+                                // Keep waiting
+                                countWait();
+                            }
+                        }
+
                     }
                     break;
             }
@@ -216,5 +235,61 @@ public class Robot implements IMovable{
 		tube = mailItem;
 		if (tube.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
 	}
+
+    /**
+     * This method gets the team mode of a robot
+     * @return true if the robot is in a team. false is the robot is working individually
+     */
+	public boolean getTeamMode(){
+	    return teamMode;
+    }
+
+    /**
+     * This method turns on the team mode of a robot
+     */
+    public void turnTeamModeOn(){
+	    teamMode = true;
+    }
+
+    /**
+     * This method turns off the team mode of a robot after
+     * a robot finishes delivering as a team with its hand
+     */
+    private void turnTeamModeOff(){
+	    teamMode = false;
+	    resetWaitCounter();
+    }
+
+    /**
+     * This method checks if the team mode is on
+     * @return <b>true</b> if it is on, which means the robot is delivering as a team.<br/>
+     * <b>false</b> if the robot is delivering as an individual.
+     */
+    private boolean isTeamModeOn(){
+	    return teamMode == true;
+    }
+
+    /**
+     * This method returns the wait counter value
+     * @return The amount of time a robot has been waiting in a team before the next move
+     */
+    public int getWaitCounter(){ // Not used in this version. Good practice to keep a getter
+	    return waitCounter;
+    }
+
+    /**
+     * This method adds the wait counter by one unit of time.
+     */
+    private void countWait(){
+        waitCounter++;
+    }
+
+    /**
+     * This method resets the wait counter to 0
+     * when a robot switches from team mode to individual mode
+     */
+    private void resetWaitCounter(){
+	    waitCounter = 0;
+    }
 
 }
