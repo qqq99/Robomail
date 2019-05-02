@@ -14,14 +14,6 @@ public class Configuration {
     // Use Bill Pugh to implement Singleton
     private Configuration(){}
 
-    private static class SingletonHelper{
-        private static final Configuration INSTANCE = new Configuration();
-    }
-
-    public static Configuration getInstance(){
-        return Configuration.SingletonHelper.INSTANCE;
-    }
-
     // use static initializer to read the configuration file when the class is loaded
     static {
         automailProperties = new Properties();

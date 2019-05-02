@@ -272,4 +272,12 @@ public class MailPool implements IMailPool {
 		ROBOTS_DELIVERING.put(mailItem, --currentTeamSize);
 	}
 
+	@Override
+	public String toString() {
+		return "MailPool{" +
+				"pool=" + pool +
+				", robots=" + robots +
+				", numOfRobots=" + numOfRobots +
+				'}';
+	}
 }

@@ -15,7 +15,7 @@ public class Robot implements IMovable{
     public static final int PAIR_MAX_WEIGHT = 2600;
     public static final int TRIPLE_MAX_WEIGHT = 3000;
 
-    IMailDelivery delivery;
+    private IMailDelivery delivery;
     protected final String id;
     /** Possible states the robot can be in */
     public enum RobotState { DELIVERING, WAITING, RETURNING }
@@ -82,12 +82,12 @@ public class Robot implements IMovable{
                         mailPool.registerWaiting(this);
                         changeState(RobotState.WAITING);
                     } else {
-                        /** If the robot is not at the mailroom floor yet, then move towards it! */
+                        /** If the robot is not at the mail room floor yet, then move towards it! */
                         moveTowards(Building.MAILROOM_LOCATION);
                         break;
                     }
                 case WAITING:
-                    /** If the StorageTube is ready and the Robot is waiting in the mailroom then start the delivery */
+                    /** If the StorageTube is ready and the Robot is waiting in the mail room then start the delivery */
                     if(!isEmpty() && receivedDispatch){
                         receivedDispatch = false;
                         deliveryCounter = 0; // reset delivery counter
@@ -184,7 +184,8 @@ public class Robot implements IMovable{
     	assert(!(deliveryItem == null && tube != null));
     	if (currentState != nextState) {
     		// Example: R(1) means tube is also filled before delivery
-            System.out.printf("T: %3d > %7s changed from %s to %s%n", Clock.Time(), getIdTube(), currentState, nextState);
+            System.out.printf("T: %3d > %7s changed from %s to %s%n",
+                    Clock.Time(), getIdTube(), currentState, nextState);
     	}
     	currentState = nextState;
     	if(nextState == RobotState.DELIVERING){
@@ -220,9 +221,11 @@ public class Robot implements IMovable{
 	public void addToHand(MailItem mailItem) throws ItemTooHeavyException {
 		assert(deliveryItem == null);
 		deliveryItem = mailItem;
-		// Adjust the max. weight a robot's hand can carry
-        // based on the team capacity and number of robots in the mail pool
-		if (deliveryItem.weight > mailPool.getSysMaxWeight()) throw new ItemTooHeavyException();
+        /**
+         * Adjust the max. weight a robot's hand can carry
+         * based on the team capacity and number of robots in the mail pool
+         */
+		if (deliveryItem.getWeight() > mailPool.getSysMaxWeight()) throw new ItemTooHeavyException();
 	}
 
     /**
@@ -234,14 +237,14 @@ public class Robot implements IMovable{
 	public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
 		assert(tube == null);
 		tube = mailItem;
-		if (tube.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
+		if (tube.getWeight() > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
 	}
 
     /**
      * This method gets the team mode of a robot
      * @return true if the robot is in a team. false is the robot is working individually
      */
-	public boolean getTeamMode(){
+	public boolean getTeamMode(){  // Not used in this version. Good practice to keep a getter
 	    return teamMode;
     }
 
@@ -266,7 +269,7 @@ public class Robot implements IMovable{
      * @return <b>true</b> if it is on, which means the robot is delivering as a team.<br/>
      * <b>false</b> if the robot is delivering as an individual.
      */
-    private boolean isTeamModeOn(){
+    public boolean isTeamModeOn(){
 	    return teamMode == true;
     }
 

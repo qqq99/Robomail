@@ -11,13 +11,13 @@ import java.util.TreeMap;
 public class MailItem {
 	
     /** Represents the destination floor to which the mail is intended to go */
-    protected final int destination_floor;
+    protected final int DESTINATION_FLOOR;
     /** The mail identifier */
-    protected final String id;
+    protected final String ID;
     /** The time the mail item arrived */
-    protected final int arrival_time;
+    protected final int ARRIVAL_TIME;
     /** The weight in grams of the mail item */
-    protected final int weight;
+    protected final int WEIGHT;
 
     /**
      * Constructor for a MailItem
@@ -26,15 +26,19 @@ public class MailItem {
      * @param weight the weight of this mail item
      */
     public MailItem(int dest_floor, int arrival_time, int weight){
-        this.destination_floor = dest_floor;
-        this.id = String.valueOf(hashCode());
-        this.arrival_time = arrival_time;
-        this.weight = weight;
+        this.DESTINATION_FLOOR = dest_floor;
+        this.ID = String.valueOf(hashCode());
+        this.ARRIVAL_TIME = arrival_time;
+        this.WEIGHT = weight;
     }
 
+    /**
+     * This method returns the MailItem as a String value
+     * @return The mail item as a String
+     */
     @Override
     public String toString(){
-        return String.format("Mail Item:: ID: %6s | Arrival: %4d | Destination: %2d | Weight: %4d", id, arrival_time, destination_floor, weight);
+        return String.format("Mail Item:: ID: %6s | Arrival: %4d | Destination: %2d | Weight: %4d", ID, ARRIVAL_TIME, DESTINATION_FLOOR, WEIGHT);
     }
 
     /**
@@ -42,7 +46,7 @@ public class MailItem {
      * @return the destination floor of the mail item
      */
     public int getDestFloor() {
-        return destination_floor;
+        return DESTINATION_FLOOR;
     }
     
     /**
@@ -50,7 +54,7 @@ public class MailItem {
      * @return the ID of the mail item
      */
     public String getId() {
-        return id;
+        return this.ID;
     }
 
     /**
@@ -58,7 +62,7 @@ public class MailItem {
      * @return the arrival time of the mail item
      */
     public int getArrivalTime(){
-        return arrival_time;
+        return ARRIVAL_TIME;
     }
 
     /**
@@ -66,7 +70,7 @@ public class MailItem {
     * @return the weight of the mail item
     */
    public int getWeight(){
-       return weight;
+       return WEIGHT;
    }
    
 	static private int count = 0;

@@ -37,6 +37,10 @@ public class Automail {
 		return null;
 	}
 
+	/**
+	 * This method gets the mail pool of the automail
+	 * @return A mail pool with IMailPool interface implemented
+	 */
 	public IMailPool getMailPool() {
 		return mailPool;
 	}
