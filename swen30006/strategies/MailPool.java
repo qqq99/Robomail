@@ -51,8 +51,8 @@ public class MailPool implements IMailPool {
 	
 	private static int MAX_WEIGHT;
 	
-	private static List<MailItem> MAIL_REJECTED = new ArrayList<>();
-	private static HashMap<MailItem, Integer> ROBOTS_DELIVERING = new HashMap<>();
+	private static List<MailItem> mailRejectedList = new ArrayList<>();
+	private static HashMap<MailItem, Integer> robotsDeliveringMap = new HashMap<>();
 
 	private LinkedList<Item> pool;
 	private LinkedList<Robot> robots;
@@ -74,7 +74,7 @@ public class MailPool implements IMailPool {
 		if (mailItem.getWeight() > getSysMaxWeight()) {
 			System.out.printf("T: %3d > Item too heavy. Rejected addToPool [%s]%n",
 					Clock.Time(), mailItem.toString());
-    		MAIL_REJECTED.add(mailItem);
+    		mailRejectedList.add(mailItem);
 			return;
     	}
 		Item item = new Item(mailItem);
@@ -135,7 +135,7 @@ public class MailPool implements IMailPool {
 		try {
 			// Add to hand
 			robot.addToHand(item); // hand first as we want higher priority delivered first
-			ROBOTS_DELIVERING.put(item, 1);
+			robotsDeliveringMap.put(item, 1);
 			j.remove();
 			
 			// Add to tube
@@ -143,7 +143,7 @@ public class MailPool implements IMailPool {
 				item = j.next().mailItem;
 				if (getNumOfRobotsNeeded(item) == TeamSize.ONE.getValue()) {
 					robot.addToTube(item);
-					ROBOTS_DELIVERING.put(item, TeamSize.ONE.getValue());
+					robotsDeliveringMap.put(item, TeamSize.ONE.getValue());
 					j.remove();
 				} else {
 					j.previous(); // Move back the pointer 
@@ -180,7 +180,7 @@ public class MailPool implements IMailPool {
 				i.remove(); // remove robot from robot queue
 			}
 			robotsToDispatch.forEach(robot -> robot.dispatch()); // send the robots off as a team
-			ROBOTS_DELIVERING.put(mailItem, numOfRobotsNeeded);
+			robotsDeliveringMap.put(mailItem, numOfRobotsNeeded);
 			j.remove(); // remove mailItem from mailPool queue
 		} catch (Exception e) { 
             throw e; 
@@ -256,7 +256,7 @@ public class MailPool implements IMailPool {
 	}
 
 	public int getNumOfMailItemRejected() {
-		return MAIL_REJECTED.size();
+		return mailRejectedList.size();
 	}
 
 	public int getSysMaxWeight() {
@@ -264,12 +264,12 @@ public class MailPool implements IMailPool {
 	}
 
 	public int getRobotsDelivering(MailItem mailItem){
-		return ROBOTS_DELIVERING.get(mailItem);
+		return robotsDeliveringMap.get(mailItem);
 	}
 
 	public void removeRobotFromDelivery(MailItem mailItem){
-		int currentTeamSize = ROBOTS_DELIVERING.get(mailItem);
-		ROBOTS_DELIVERING.put(mailItem, --currentTeamSize);
+		int currentTeamSize = robotsDeliveringMap.get(mailItem);
+		robotsDeliveringMap.put(mailItem, --currentTeamSize);
 	}
 
 	@Override
