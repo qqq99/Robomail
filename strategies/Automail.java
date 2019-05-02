@@ -6,7 +6,7 @@ import automail.Robot;
 import java.util.Arrays;
 
 /**
- * An Automail is a system that manages a mail pool and a set of robots.
+ * An automail is a system that manages a mail pool and a set of robots.
  * It located at the mail room, which is on the ground floor, of a building.
  * It sorts mail items received based on their arrival time and priority, then
  * assigns robots to deliver the items as a team or individually.<br/><br/>

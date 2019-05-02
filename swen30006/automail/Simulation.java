@@ -14,13 +14,13 @@ import java.util.LinkedList;
 /**
  * This class simulates the behaviour of AutoMail
  */
-public class Simulation {	
+public class Simulation {
+
+	/** Constant for the mail generator */
+	private static int MAIL_TO_CREATE;
+	private static int MAIL_MAX_WEIGHT;
 
     public static void main(String[] args){
-    	
-    	/** Constant for the mail generator */
-        int MAIL_TO_CREATE;
-        int MAIL_MAX_WEIGHT;
 
     	/** Configuration class is loaded */
 		//Seed
@@ -63,24 +63,24 @@ public class Simulation {
         Integer seed = seedMap.get(true);
         System.out.printf("Seed: %s%n", seed == null ? "null" : seed.toString());
 
-        Automail automail = new Automail(mailPool, ReportDelivery.getInstance(), new Robot[robots]);
+        Automail.getInstance(mailPool, ReportDelivery.getInstance(), new Robot[robots]);
 
         /** Initiate all the mail */
         MailGenerator mailGenerator = new MailGenerator(
-        		MAIL_TO_CREATE, MAIL_MAX_WEIGHT, automail.getMailPool(), seedMap);
+        		MAIL_TO_CREATE, MAIL_MAX_WEIGHT, Automail.getMailPool(), seedMap);
         mailGenerator.generateAllMail();
         // PriorityMailItem priority;  // Not used in this version
         while(mailGenerator.getMailCreated() !=
-				ReportDelivery.getNumOfMailDelivered() + automail.getMailPool().getNumOfMailItemRejected()) {
+				ReportDelivery.getNumOfMailDelivered() + Automail.getMailPool().getNumOfMailItemRejected()) {
 
         	/** Add mail items to the pool */
         	mailGenerator.step();
             try {
             	/** Load mail items to the robots */
-            	automail.getMailPool().step();
+            	Automail.getMailPool().step();
 
             	/** Move the robots */
-				for (int k=0; k<automail.getMailPool().getNumOfRobots(); k++) automail.getRobot(k).step();
+				for (int k = 0; k< Automail.getMailPool().getNumOfRobots(); k++) Automail.getRobot(k).step();
 
 			} catch (ItemTooHeavyException e) {
 				e.printStackTrace();
@@ -91,7 +91,7 @@ public class Simulation {
         }
 
         /** Generate the delivery report */
-        ReportDelivery.printResults(automail, mailGenerator);
+        ReportDelivery.printResults(Automail.getInstance(), mailGenerator);
     }
     
 
