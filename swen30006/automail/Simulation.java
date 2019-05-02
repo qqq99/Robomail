@@ -15,12 +15,12 @@ import java.util.LinkedList;
  * This class simulates the behaviour of AutoMail
  */
 public class Simulation {	
-	
-    /** Constant for the mail generator */
-    private static int MAIL_TO_CREATE;
-    private static int MAIL_MAX_WEIGHT;
 
     public static void main(String[] args){
+    	
+    	/** Constant for the mail generator */
+        int MAIL_TO_CREATE;
+        int MAIL_MAX_WEIGHT;
 
     	/** Configuration class is loaded */
 		//Seed

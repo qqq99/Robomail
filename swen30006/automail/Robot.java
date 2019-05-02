@@ -197,8 +197,8 @@ public class Robot implements IMovable{
 		return tube;
 	}
     
-	static private int count = 0;
-	static private Map<Integer, Integer> hashMap = new TreeMap<Integer, Integer>();
+	private int count = 0;
+	private Map<Integer, Integer> hashMap = new TreeMap<Integer, Integer>();
 
 	@Override
 	public int hashCode() {

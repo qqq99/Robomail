@@ -49,10 +49,10 @@ public class MailPool implements IMailPool {
 		}
 	}
 	
-	private static int MAX_WEIGHT;
+	private int MAX_WEIGHT;
 	
-	private static List<MailItem> mailRejectedList = new ArrayList<>();
-	private static HashMap<MailItem, Integer> robotsDeliveringMap = new HashMap<>();
+	private List<MailItem> mailRejectedList = new ArrayList<>();
+	private HashMap<MailItem, Integer> robotsDeliveringMap = new HashMap<>();
 
 	private LinkedList<Item> pool;
 	private LinkedList<Robot> robots;
