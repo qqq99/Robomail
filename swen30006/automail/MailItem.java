@@ -33,8 +33,8 @@ public class MailItem {
     }
 
     /**
-     * This method returns the MailItem as a String value
-     * @return The mail item as a String
+     * This method returns the MailItem as a String value.
+     * @return the mail item as a String
      */
     @Override
     public String toString(){
@@ -42,7 +42,7 @@ public class MailItem {
     }
 
     /**
-     *
+     * This method gets the destination floor of a mail item.
      * @return the destination floor of the mail item
      */
     public int getDestFloor() {
@@ -50,7 +50,7 @@ public class MailItem {
     }
     
     /**
-     *
+     * This method gets the id of a mail item.
      * @return the ID of the mail item
      */
     public String getId() {
@@ -58,7 +58,7 @@ public class MailItem {
     }
 
     /**
-     *
+     * This method gets the arrival time of a mail item.
      * @return the arrival time of the mail item
      */
     public int getArrivalTime(){
@@ -66,7 +66,7 @@ public class MailItem {
     }
 
     /**
-    *
+    * This method gets the weight of a mail item.
     * @return the weight of the mail item
     */
    public int getWeight(){

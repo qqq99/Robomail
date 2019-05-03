@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * The robot delivers mail!
+ * The robot delivers mail items
  */
 public class Robot implements IMovable{
 

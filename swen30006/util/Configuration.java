@@ -5,16 +5,17 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/**
+ * A Configuration set up the variables before running the Simulation
+ */
 public class Configuration {
 
     private static Logger log = Logger.getLogger(Configuration.class.getName());
     private static final String CONFIGURATION_FILE = "automail.properties";
     private static Properties automailProperties;
 
-    // Use Bill Pugh to implement Singleton
-    private Configuration(){}
-
     // use static initializer to read the configuration file when the class is loaded
+    private Configuration(){}
     static {
         automailProperties = new Properties();
         // Default properties
@@ -48,6 +49,11 @@ public class Configuration {
 
     }
 
+    /**
+     * This method gets a value of the Configuration property
+     * @param key the key value of the property value
+     * @return the value of the Configuration property looked up by the key
+     */
     public static String getProperty(String key){
         return automailProperties.getProperty(key);
     }

@@ -6,12 +6,22 @@ import strategies.Automail;
 
 import java.util.ArrayList;
 
+/**
+ * A ReportDelivery is responsible for tracking the delivery status
+ * of mail items accepted by the system. It also generate a delivery summary report
+ * after all delivery items are delivered by the robots, excluding
+ * mail items over team capacity, which won't be assigned to any robots by the
+ * MailPool to deliver.<br/><br/>
+ * For example, if the Automail system only has 2 robots, the team capacity is 2600 grams.
+ * Any mail items have a weight over 2600 grams are rejected in the report
+ * for calculating the delivery time and score.
+ */
 public class ReportDelivery implements IMailDelivery {
 
     private static double TOTAL_SCORE = 0;
     private static ArrayList<MailItem> MAIL_DELIVERED = new ArrayList<>();
 
-    // Use Bill Pugh to implement Singleton
+    /** Use Bill Pugh to implement Singleton */
     private ReportDelivery(){}
 
     private static class SingletonHelper{
@@ -75,7 +85,7 @@ public class ReportDelivery implements IMailDelivery {
      * - A statement showing the number of delivered, created, and rejected mail items
      * (visible only when there is any mail item rejected due to reasons like
      * mail item's weight exceed the team capacity of the automail system)<br/>
-     * - Total delivery time of mail items created (exclude any rejected items)<br/>
+     * - Total time to process mail items received + deliver mail items accepted<br/>
      * - Total score of the simulation
      * @param automail The automail system
      * @param mailGenerator The mail generator

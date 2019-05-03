@@ -15,6 +15,11 @@ public enum TeamSize {
         this.teamSize = teamSize;
     }
 
+    /**
+     * This method gets the number of robots in a team by the String value,
+     * e.g. TeamSize.ONE, TeamSize.TWO, TeamSize.THREE
+     * @return The number of robots based on a team size specified
+     */
     public int getValue() {
         return this.teamSize;
     }

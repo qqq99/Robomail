@@ -11,7 +11,7 @@ public class PriorityMailItem extends MailItem{
 	}
 	
     /**
-    *
+    * This method gets the priority level of a mail item
     * @return the priority level of a mail item
     */
    public int getPriorityLevel(){

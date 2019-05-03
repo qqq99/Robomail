@@ -10,7 +10,7 @@ import automail.PriorityMailItem;
 import strategies.IMailPool;
 
 /**
- * This class generates the mail
+ * This class is used to generate mail items and load them into the Automail system.
  */
 public class MailGenerator{
 
@@ -27,6 +27,7 @@ public class MailGenerator{
     private static IMailPool mailPool;
     private static Map<Integer,ArrayList<MailItem>> allMail;
 
+    /** Use Bill Pugh to implement Singleton */
     public static MailGenerator getInstance(
             int mailToCreate, int mailMaxWeight, IMailPool mailPool, HashMap<Boolean,Integer> seed) {
         if (INSTANCE == null) {
@@ -168,6 +169,10 @@ public class MailGenerator{
         return priority;
     }
 
+    /**
+     * This method gets the number of mail items created
+     * @return the number of mail items created
+     */
     public static int getMailCreated() {
         return mailCreated;
     }

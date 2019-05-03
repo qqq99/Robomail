@@ -23,6 +23,7 @@ public class Simulation {
     public static void main(String[] args){
 
     	/** Configuration class is loaded */
+
 		//Seed
 		String seedProp = Configuration.getProperty("Seed");
 		// Floors

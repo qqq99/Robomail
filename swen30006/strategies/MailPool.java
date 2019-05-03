@@ -7,7 +7,7 @@ import automail.Robot.RobotState;
 import exceptions.ItemTooHeavyException;
 
 /**
- * A MailPool receives and delivers mail items in a building
+ * A MailPool subsystem receives and delivers mail items in a building
  * with the use of robots.<br/><br/>
  *
  * A mail item can be carried by one to three robots.
@@ -121,9 +121,9 @@ public class MailPool implements IMailPool {
 	
 	/**
 	 * This method loads mailItems to a robot
-	 * @param i A listIterator of robots
-	 * @param j A listIterator of mailItems to be assigned and delivered
-	 * @param mailItem The first mailItem to be added to this robot
+	 * @param i a listIterator of robots
+	 * @param j a listIterator of mailItems to be assigned and delivered
+	 * @param mailItem the first mailItem to be added to this robot
 	 * @throws ItemTooHeavyException
 	 */
 	private void loadRobot(ListIterator<Robot> i, ListIterator<Item> j, MailItem mailItem)
@@ -158,9 +158,9 @@ public class MailPool implements IMailPool {
 
 	/**
 	 * This method loads mailItems to a team of robots
-	 * @param i A listIterator of robots
-	 * @param j A listIterator of mailItems to be assigned and delivered
-	 * @param mailItem The first mailItem to be added to this robot
+	 * @param i a listIterator of robots
+	 * @param j a listIterator of mailItems to be assigned and delivered
+	 * @param mailItem the first mailItem to be added to this robot
 	 * @throws ItemTooHeavyException
 	 */
 	private void loadRobots(ListIterator<Robot> i, ListIterator<Item> j, MailItem mailItem) 
@@ -192,6 +192,11 @@ public class MailPool implements IMailPool {
 		robots.add(robot);
 	}
 
+	/**
+	 * This method sets the maximum weight the mail pool
+	 * can accept based on the number of robots available.
+	 * @param numOfRobots the number of robots can be used by the Automail system
+	 */
 	private void setMaxWeight(int numOfRobots){
 		switch(numOfRobots) {
 			case 0:
@@ -211,16 +216,16 @@ public class MailPool implements IMailPool {
 	}
 
 	/**
-	 * This method returns the number of robots of the mail pool
-	 * @return The number of robots at the mail pool
+	 * This method returns the total number of robots available.
+	 * @return the number of robots at the mail pool
 	 */
 	public int getNumOfRobots(){
 		return numOfRobots;
 	}
 
 	/**
-	 * This method gets a list of robots from the mail pool
-	 * @return A LinkedList of robots at the mail pool
+	 * This method gets a list of all the robots available.
+	 * @return a LinkedList of robots at the mail pool
 	 */
 	public LinkedList<Robot> getRobots(){
 		return robots;
@@ -228,8 +233,10 @@ public class MailPool implements IMailPool {
 
 	/**
 	 * This method gets the number of robots needed to deliver a mailItem
-	 * @param mailItem MailItem to be delivered
-	 * @return 1 to 3 for the number of robots needed. -1 if more than 3 robots is needed.
+	 * @param mailItem a mailItem to be delivered
+	 * @return the number of robots needed to deliver this mail item,
+	 * ranging from 1 for one robot, to 3 for three robots.<br/><br/>
+	 * Return -1 if more than 3 robots is needed.
 	 */
 	private int getNumOfRobotsNeeded(MailItem mailItem) {
 		int mailItemWeight = mailItem.getWeight();
@@ -245,6 +252,11 @@ public class MailPool implements IMailPool {
 		return -1;
 	}
 
+	/**
+	 * This method gets the number of robots waiting at the mail room
+	 * and ready to load and deliver mail items.
+	 * @return the number of robots waiting for delivery assignments
+	 */
 	private int getNumOfRobotsAvailable() {
 		int count = 0;
 		for (Robot robot: robots) {
@@ -255,18 +267,38 @@ public class MailPool implements IMailPool {
 		return count;
 	}
 
+	/**
+	 * This method gets the number of mail items rejected by the mail pool.
+	 * @return the number of mail items rejected for delivery
+	 */
 	public int getNumOfMailItemRejected() {
 		return mailRejectedList.size();
 	}
 
+	/**
+	 * This method gets the maximum weight of a mail item the mail pool accepts.
+	 * @return the maximum weight of a mail item accepted for delivery
+	 */
 	public int getSysMaxWeight() {
 		return MAX_WEIGHT;
 	}
 
+	/**
+	 * This method gets the number of robots delivering a mail item.
+	 * @param mailItem The id of the mail item delivering by one or more robots
+	 * @return the number of robots being used for delivering the mail item.
+	 */
 	public int getRobotsDelivering(MailItem mailItem){
 		return robotsDeliveringMap.get(mailItem);
 	}
 
+	/**
+	 * This method reduces the number of robots delivering a mail item.
+	 * It is called when a robot delivers as a team and it reaches the destination floor.
+	 * It is used to make sure all robots arrive at the destination floor
+	 * before updating the delivery status of a mail item.
+	 * @param mailItem the mail item being delivered
+	 */
 	public void removeRobotFromDelivery(MailItem mailItem){
 		int currentTeamSize = robotsDeliveringMap.get(mailItem);
 		robotsDeliveringMap.put(mailItem, --currentTeamSize);
