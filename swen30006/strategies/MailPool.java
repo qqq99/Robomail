@@ -224,14 +224,6 @@ public class MailPool implements IMailPool {
 	}
 
 	/**
-	 * This method gets a list of all the robots available.
-	 * @return a LinkedList of robots at the mail pool
-	 */
-	public LinkedList<Robot> getRobots(){
-		return robots;
-	}
-
-	/**
 	 * This method gets the number of robots needed to deliver a mailItem
 	 * @param mailItem a mailItem to be delivered
 	 * @return the number of robots needed to deliver this mail item,

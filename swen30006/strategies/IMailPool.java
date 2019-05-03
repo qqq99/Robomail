@@ -37,12 +37,6 @@ public interface IMailPool {
 	int getNumOfRobots();
 
 	/**
-	 * This method gets a list of robots from the mail pool
-	 * @return a LinkedList of robots at the mail pool
-	 */
-	LinkedList getRobots();
-
-	/**
 	 * This method returns the number of mailItems rejected due to weight over the mail pool's limit
 	 * @return the number of rejected mailItems
 	 */
