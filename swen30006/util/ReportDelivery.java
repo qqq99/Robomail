@@ -84,21 +84,21 @@ public class ReportDelivery implements IMailDelivery {
      * - A simulation complete statement<br/>
      * - A statement showing the number of delivered, created, and rejected mail items
      * (visible only when there is any mail item rejected due to reasons like
-     * mail item's weight exceed the team capacity of the automail system)<br/>
+     * mail item's weight exceed the team capacity of the Automail system)<br/>
      * - Total time to process mail items received + deliver mail items accepted<br/>
      * - Total score of the simulation
-     * @param automail The automail system
+     * @param automail The Automail system
      * @param mailGenerator The mail generator
      */
-    public static void printResults(Automail automail, MailGenerator mailGenerator){
+    public static void printResults(){
         System.out.println("T: "+Clock.Time()+" | Simulation complete!");
 
         // For debugging when robot is more than one and max. weight exceeds team capacity of the system
-        if (automail.getMailPool().getNumOfMailItemRejected() > 0){
+        if (Automail.getMailPool().getNumOfMailItemRejected() > 0){
             System.out.printf("Created: %6d; Delivered: %4d; Rejected: %5d%n",
-                    mailGenerator.getMailCreated(),
+                    MailGenerator.getMailCreated(),
                     MAIL_DELIVERED.size(),
-                    automail.getMailPool().getNumOfMailItemRejected());
+                    Automail.getMailPool().getNumOfMailItemRejected());
         }
 
         System.out.println("Final Delivery time: "+Clock.Time());

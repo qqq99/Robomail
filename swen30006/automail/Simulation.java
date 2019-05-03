@@ -92,7 +92,7 @@ public class Simulation {
         }
 
         /** Generate the delivery report */
-        ReportDelivery.printResults(Automail.getInstance(), MailGenerator.getInstance());
+        ReportDelivery.printResults();
     }
     
 
