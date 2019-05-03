@@ -87,8 +87,6 @@ public class ReportDelivery implements IMailDelivery {
      * mail item's weight exceed the team capacity of the Automail system)<br/>
      * - Total time to process mail items received + deliver mail items accepted<br/>
      * - Total score of the simulation
-     * @param automail The Automail system
-     * @param mailGenerator The mail generator
      */
     public static void printResults(){
         System.out.println("T: "+Clock.Time()+" | Simulation complete!");
