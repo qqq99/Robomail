@@ -14,7 +14,7 @@ import exceptions.ItemTooHeavyException;
  * If a mail item requires more than one robot to carry, it can only be
  * carried by a maximum of three robots with their hands.<br/><br/>
  *
- * Any mail items exceeding the INDIVIDUAL_MAX_WEIGHT of a {@link Automail.Robot}
+ * Any mail items exceeding the INDIVIDUAL_MAX_WEIGHT of a {@link automail.Robot}
  * cannot be put into the robot's tube.
  */
 public class MailPool implements IMailPool {

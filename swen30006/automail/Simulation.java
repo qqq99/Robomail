@@ -66,15 +66,15 @@ public class Simulation {
         Automail.getInstance(mailPool, ReportDelivery.getInstance(), new Robot[robots]);
 
         /** Initiate all the mail */
-        MailGenerator mailGenerator = new MailGenerator(
-        		MAIL_TO_CREATE, MAIL_MAX_WEIGHT, Automail.getMailPool(), seedMap);
-        mailGenerator.generateAllMail();
+		MailGenerator.getInstance(
+				MAIL_TO_CREATE, MAIL_MAX_WEIGHT, Automail.getMailPool(), seedMap);
+		MailGenerator.generateAllMail();
         // PriorityMailItem priority;  // Not used in this version
-        while(mailGenerator.getMailCreated() !=
+        while(MailGenerator.getMailCreated() !=
 				ReportDelivery.getNumOfMailDelivered() + Automail.getMailPool().getNumOfMailItemRejected()) {
 
         	/** Add mail items to the pool */
-        	mailGenerator.step();
+			MailGenerator.step();
             try {
             	/** Load mail items to the robots */
             	Automail.getMailPool().step();
@@ -91,7 +91,7 @@ public class Simulation {
         }
 
         /** Generate the delivery report */
-        ReportDelivery.printResults(Automail.getInstance(), mailGenerator);
+        ReportDelivery.printResults(Automail.getInstance(), MailGenerator.getInstance());
     }
     
 

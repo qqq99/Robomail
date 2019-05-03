@@ -20,6 +20,7 @@ public class Automail {
 	private static Robot[] robots;
     private static IMailPool mailPool;
 
+	// Use Bill Pugh to implement Singleton
 	public static Automail getInstance(IMailPool mailPool, IMailDelivery delivery, Robot[] robots) {
 		if (INSTANCE == null) {
 			synchronized (Automail.class) {
@@ -36,7 +37,7 @@ public class Automail {
 		return INSTANCE;
 	}
 
-    public Automail(IMailPool mailPool, IMailDelivery delivery, Robot[] robots) {
+    private Automail(IMailPool mailPool, IMailDelivery delivery, Robot[] robots) {
 
     	/** Initialize the MailPool */
     	this.mailPool = mailPool;
