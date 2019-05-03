@@ -9,10 +9,10 @@ Project 1: Robomail Revision
 - Qian Xu
 
 ## Assumptions
-- There is only one mailroom and it has only one automail system
+- There is only one mail room and it has only one Automail system
 - An item can be carried by one to three robots
 - There is at least 1 robot in the system
-- Any mail items exceed the weight capacities are to be 
+- Any mail items exceed the weight capacities are to be rejected
 - Assume group floor is the lowest level of the building with floor value equals to 1
 
 ## How to test (one example only)
