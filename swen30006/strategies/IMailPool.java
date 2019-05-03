@@ -4,6 +4,8 @@ import automail.MailItem;
 import automail.Robot;
 import exceptions.ItemTooHeavyException;
 
+import java.util.LinkedList;
+
 /**
  * addToPool is called when there are mail items newly arrived at the building to add to the MailPool or
  * if a robot returns with some undelivered items - these are added back to the MailPool.
@@ -19,7 +21,7 @@ public interface IMailPool {
     void addToPool(MailItem mailItem);
     
     /**
-     * load up any waiting robots with mailItems, if any.
+     * This method loads up any waiting robots with mail items, if any.
      */
 	void step() throws ItemTooHeavyException;
 
@@ -27,5 +29,37 @@ public interface IMailPool {
      * @param robot refers to a robot which has arrived back ready for more mailItems to deliver
      */	
 	void registerWaiting(Robot robot);
+
+	/**
+	 * This method returns the number of robots of the mail pool
+	 * @return the number of robots at the mail pool
+	 */
+	int getNumOfRobots();
+
+	/**
+	 * This method returns the number of mailItems rejected due to weight over the mail pool's limit
+	 * @return the number of rejected mailItems
+	 */
+	int getNumOfMailItemRejected();
+
+	/**
+	 * This method returns the mail pool's maximum accepted weight of mailItems could be delivered
+	 * by the number of robots it has and the maximum team capacity
+	 * @return the maximum weight robots of the mail pool can deliver
+	 */
+	int getSysMaxWeight();
+
+	/**
+	 * This method returns the number of robots delivering a mail item.
+	 * @param mailItem The id of the mail item delivering by one or more robots
+	 * @return the number of robots delivering the mail item
+	 */
+	int getRobotsDelivering(MailItem mailItem);
+
+	/**
+	 * This method removes a robot from a list of mail items delivering.
+	 * @param mailItem the mail item being delivered
+	 */
+	void removeRobotFromDelivery(MailItem mailItem);
 
 }
